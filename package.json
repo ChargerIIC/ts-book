@@ -1,0 +1,25 @@
+{
+  "name": "ts-book",
+  "version": "1.0.0",
+  "description": "TypeScript Training",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChargerIIC/ts-book.git"
+  },
+  "author": "ChargerIIC",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ChargerIIC/ts-book/issues"
+  },
+  "homepage": "https://github.com/ChargerIIC/ts-book#readme",
+  "devDependencies": {
+    "gulp-typescript": "^3.1.3"
+  },
+  "dependencies": {
+    "jquery": "^3.1.1"
+  }
+}
