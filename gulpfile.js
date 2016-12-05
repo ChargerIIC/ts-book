@@ -68,18 +68,12 @@ gulp.task('bundle-test', function () {
              .pipe(gulp.dest('./dist/test/'));
 });
 
+var Server = require('karma').Server;
 
-var karma = require('karma').Server;
 gulp.task('karma', function (done) {
   new Server({
     configFile: __dirname + '/karma.conf.js',
     singleRun: true
-  }, done).start();
-});
-
-gulp.task('test', function (done) {
-  new Server({
-    configFile: __dirname + '/karma.conf.js'
   }, done).start();
 });
 
@@ -94,7 +88,7 @@ gulp.task('browser-sync', ['test'], function() {
   browserSync({
     server: {
       baseDir: "./dist"
-    }
+    }});
   });
 
   var runSequence = require('run-sequence');
@@ -116,4 +110,3 @@ gulp.task('browser-sync', ['test'], function() {
     "./dist/data/**/**",
     "./index.html"
   ], [browserSync.reload]);
-});
