@@ -80,29 +80,24 @@ gulp.task('default', function(cb) {
   );
 });
 
-var karma = require("gulp-karma");
+var karma = require('karma').Server;
+gulp.task('karma', function (done) {
+  new Server({
+    configFile: __dirname + '/karma.conf.js',
+    singleRun: true
+  }, done).start();
+});
 
-gulp.task('karma', function(cb) {
-  gulp.src('./dist/test/**/**.test.js')
-      .pipe(karma({
-         configFile: 'karma.conf.js',
-         action: 'run'
-       }))
-       .on('end', cb)
-       .on('error', function(err) {
-         // Make sure failed tests cause gulp to exit non-zero
-         throw err;
-       });
+gulp.task('test', function (done) {
+  new Server({
+    configFile: __dirname + '/karma.conf.js'
+  }, done).start();
 });
 
 gulp.task('bundle', function(cb) {
   runSequence('build', [
     'bundle-js', 'bundle-test'
   ], cb);
-});
-
-gulp.task('test', function(cb) {
-  runSequence('bundle', ['karma'], cb);
 });
 
 var browserSync = require('browser-sync');
