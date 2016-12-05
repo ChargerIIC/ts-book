@@ -68,17 +68,6 @@ gulp.task('bundle-test', function () {
              .pipe(gulp.dest('./dist/test/'));
 });
 
-var runSequence = require('run-sequence');
-gulp.task('default', function(cb) {
-  runSequence(
-    'lint',                      // lint
-    ['tsc', 'tsc-tests'],        // compile
-    ['bundle-js','bundle-test'], // optimize
-    'karma'                      // test
-    'browser-sync',              // serve
-    cb                           // callback
-  );
-});
 
 var karma = require('karma').Server;
 gulp.task('karma', function (done) {
@@ -106,6 +95,18 @@ gulp.task('browser-sync', ['test'], function() {
     server: {
       baseDir: "./dist"
     }
+  });
+
+  var runSequence = require('run-sequence');
+  gulp.task('default', function(cb) {
+    runSequence(
+      'lint',                      // lint
+      ['tsc', 'tsc-tests'],        // compile
+      ['bundle-js','bundle-test'], // optimize
+      'karma',                      // test
+      'browser-sync',              // serve
+      cb                           // callback
+    );
   });
 
   return gulp.watch([

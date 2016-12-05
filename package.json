@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/ChargerIIC/ts-book#readme",
   "devDependencies": {
+    "browser-sync": "^2.18.2",
     "chai": "^3.5.0",
     "generator-gulp-sass-typescript": "^0.1.5",
     "gulp-tslint": "^7.0.1",
