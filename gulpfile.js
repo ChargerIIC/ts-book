@@ -14,6 +14,15 @@ var gulp        = require("gulp"),
     header      = require("gulp-header"),
     pkg         = require(__dirname + "/package.json");
 
+gulp.task("lint", function() {
+  return gulp.src([
+                __dirname + "/source/**/**.ts",
+                __dirname + "/test/**/**.test.ts"
+              ])
+             .pipe(tslint())
+             .pipe(tslint.report("verbose"));
+});
+
 var tsProject = tsc.createProject({
   removeComments : false,
   noImplicitAny : false,
@@ -113,4 +122,14 @@ gulp.task('serve', function(cb) {
       "./**/*.css",
       "./index.html"
     ], browserSync.reload, cb);
+});
+
+gulp.task('run', function (cb) {
+  runSequence(
+    "lint",
+    ["build-source", "build-test"],
+    ["bundle-source", "bundle-test", "bundle-e2e-test"],
+    ["run-unit-test"],
+    "serve",
+    cb);
 });
