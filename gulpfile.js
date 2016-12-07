@@ -41,6 +41,20 @@ gulp.task("bundle-source", function () {
     .pipe(gulp.dest(__dirname + "/bundled/source/"));
 });
 
+var tsTestProject = tsc.createProject({
+  removeComments : false,
+  noImplicitAny : false,
+  target : "ES5",
+  module : "commonjs",
+  declarationFiles : false
+});
+
+// compile test code
+gulp.task("build-test", function() {
+  return gulp.src(__dirname + "/test/*.test.ts")
+             .pipe(tsc(tsTestProject))
+             .js.pipe(gulp.dest(__dirname + "/build/test/"));
+});
 
 gulp.task("bundle-test", function () {
 

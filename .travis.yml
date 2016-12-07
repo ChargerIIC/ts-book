@@ -6,4 +6,4 @@ before_script:
   - npm install gulp
 script:
   - gulp build-source
-  - gulp bundle-test
+  - gulp build-test
