@@ -1,112 +1,102 @@
-var gulp = require('gulp');
+var gulp        = require("gulp"),
+    browserify  = require("browserify"),
+    source      = require("vinyl-source-stream"),
+    buffer      = require("vinyl-buffer"),
+    run         = require("gulp-run"),
+    nightwatch  = require('gulp-nightwatch'),
+    tslint      = require("gulp-tslint"),
+    tsc         = require("gulp-typescript"),
+    browserSync = require('browser-sync'),
+    karma       = require("karma").server,
+    uglify      = require("gulp-uglify"),
+    docco       = require("gulp-docco"),
+    runSequence = require("run-sequence"),
+    header      = require("gulp-header"),
+    pkg         = require(__dirname + "/package.json");
 
-gulp.task('default', function() {
-  console.log('Hello Gulp!');
+var tsProject = tsc.createProject({
+  removeComments : false,
+  noImplicitAny : false,
+  target : "ES5",
+  module : "commonjs",
+  declarationFiles : false
 });
 
-var tslint = require('gulp-tslint');
-gulp.task('lint', function() {
-  return gulp.src([
-   './source/ts/**/**.ts', './test/**/**.test.ts'
- ]).pipe(tslint.report({
-      formatter: 'verbose'
-    }))
-    .pipe(tslint.report());
+gulp.task("build-source", function() {
+  return gulp.src(__dirname + "/source/*.ts")
+             .pipe(tsc(tsProject))
+             .pipe(gulp.dest(__dirname + "/build/source/"));
 });
 
-var ts = require('gulp-typescript');
-var tsProject = ts.createProject({
-    removeComments : true,
-    noImplicitAny : true,
-    target : 'ES3',
-    module : 'commonjs',
-    declarationFiles : false
+gulp.task("bundle-source", function () {
+  var b = browserify({
+    standalone : 'demos',
+    entries: __dirname + "/build/source/demos.js",
+    debug: true
+  });
+
+  return b.bundle()
+    .pipe(source("demos.js"))
+    .pipe(buffer())
+    .pipe(gulp.dest(__dirname + "/bundled/source/"));
 });
 
-gulp.task('tsc', function() {
-return gulp.src('./source/ts/**/**.ts')
-           .pipe(tsProject())
-           .js.pipe(gulp.dest('./temp/source/js'));
+
+gulp.task("bundle-test", function () {
+
+  var b = browserify({
+    standalone : 'test',
+    entries: __dirname + "/build/test/bdd.test.js",
+    debug: true
+  });
+
+  return b.bundle()
+    .pipe(source("bdd.test.js"))
+    .pipe(buffer())
+    .pipe(gulp.dest(__dirname + "/bundled/test/"));
 });
 
-var tsTestProject = ts.createProject({
-    removeComments : true,
-    noImplicitAny : true,
-    target : 'ES3',
-    module : 'commonjs',
-    declarationFiles : false
+
+gulp.task("bundle-e2e-test", function () {
+
+  var b = browserify({
+    standalone : 'test',
+    entries: __dirname + "/build/test/e2e.test.js",
+    debug: true
+  });
+
+  return b.bundle()
+    .pipe(source("e2e.test.js"))
+    .pipe(buffer())
+    .pipe(gulp.dest(__dirname + "/bundled/e2e-test/"));
 });
 
-gulp.task('tsc-tests', function() {
-  return gulp.src('./test/**/**.test.ts')
-             .pipe(tsTestProject())
-             .js.pipe(gulp.dest('./temp/test/'));
+gulp.task('run-e2e-test', function(){
+  return gulp.src('')
+    .pipe(nightwatch({
+      configFile: __dirname + '/nightwatch.json'
+    }));
 });
 
-var browserify  = require('browserify'),
-    transform   = require('vinyl-transform'),
-    uglify      = require('gulp-uglify'),
-    sourcemaps  = require('gulp-sourcemaps');
-
-var browserified = transform(function(filename) {
-  var b = browserify({ entries: filename, debug: true });
-  return b.bundle();
-});
-
-gulp.task('bundle-js', function () {
-  return gulp.src('./temp/source/js/main.js')
-             .pipe(browserified)
-             .pipe(sourcemaps.init({ loadMaps: true }))
-             .pipe(uglify())
-             .pipe(sourcemaps.write('./'))
-             .pipe(gulp.dest('./dist/source/js/'));
-});
-
-gulp.task('bundle-test', function () {
-  return gulp.src('./temp/test/**/**.test.js')
-             .pipe(browserified)
-             .pipe(gulp.dest('./dist/test/'));
-});
-
-var Server = require('karma').Server;
-
-gulp.task('karma', function (done) {
-  new Server({
-    configFile: require('path').resolve('karma.conf.js'),
+gulp.task("run-unit-test", function(cb) {
+  karma.start({
+    configFile : __dirname + "/karma.conf.js",
     singleRun: true
-  }, done).start();
+  }, cb);
 });
 
-gulp.task('bundle', function(cb) {
-  runSequence('build', [
-    'bundle-js', 'bundle-test'
-  ], cb);
+
+gulp.task('serve', function(cb) {
+    browserSync({
+        port: 8080,
+        server: {
+            baseDir: "./"
+        }
+    });
+
+    gulp.watch([
+      "./**/*.js",
+      "./**/*.css",
+      "./index.html"
+    ], browserSync.reload, cb);
 });
-
-var browserSync = require('browser-sync');
-gulp.task('browser-sync', ['test'], function() {
-  browserSync({
-    server: {
-      baseDir: "./dist"
-    }});
-  });
-
-var runSequence = require('run-sequence');
-gulp.task('default', function(cb) {
-    runSequence(
-      'lint',                      // lint
-      ['tsc', 'tsc-tests'],        // compile
-      ['bundle-js','bundle-test'], // optimize
-      'karma',                      // test
-      'browser-sync',              // serve
-      cb                           // callback
-    );
-  });
-
-  return gulp.watch([
-    "./dist/source/js/**/*.js",
-    "./dist/source/css/**.css",
-    "./dist/test/**/**.test.js",
-    "./dist/data/**/**",
-    "./index.html"
-  ], [browserSync.reload]);
