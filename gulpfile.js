@@ -91,8 +91,8 @@ gulp.task('browser-sync', ['test'], function() {
     }});
   });
 
-  var runSequence = require('run-sequence');
-  gulp.task('default', function(cb) {
+var runSequence = require('run-sequence');
+gulp.task('default', function(cb) {
     runSequence(
       'lint',                      // lint
       ['tsc', 'tsc-tests'],        // compile
