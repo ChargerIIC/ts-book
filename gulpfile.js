@@ -45,7 +45,7 @@ gulp.task("bundle-source", function () {
   });
 
   return b.bundle()
-    .pipe(source("demos.js"))
+    //.pipe(source("demos.js"))
     .pipe(buffer())
     .pipe(gulp.dest(__dirname + "/bundled/source/"));
 });
