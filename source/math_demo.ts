@@ -15,7 +15,7 @@ class MathDemo implements MathInterface{
     return result;
   }
 
-  public powAsyncSlow(base: number, exponent: number, cb : (result : number) => void) {
+  public powAsync(base: number, exponent: number, cb : (result : number) => void) {
     var delay = 45; //ms
     setTimeout(() => {
       var result = this.pow(base, exponent);
