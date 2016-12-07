@@ -6,7 +6,19 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "jquery/jquery.d.ts": {
-      "commit": "e2af6d0bd5dffabdb363e779c5ab7f47e6ff3423"
+      "commit": "0b390b15ef9c792d2743de8a129d9595cc7222a9"
+    },
+    "mocha/mocha.d.ts": {
+      "commit": "0b390b15ef9c792d2743de8a129d9595cc7222a9"
+    },
+    "chai/chai.d.ts": {
+      "commit": "0b390b15ef9c792d2743de8a129d9595cc7222a9"
+    },
+    "assertion-error/assertion-error.d.ts": {
+      "commit": "0b390b15ef9c792d2743de8a129d9595cc7222a9"
+    },
+    "sinon/sinon.d.ts": {
+      "commit": "0b390b15ef9c792d2743de8a129d9595cc7222a9"
     }
   }
 }
