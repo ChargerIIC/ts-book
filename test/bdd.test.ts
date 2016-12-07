@@ -26,4 +26,13 @@ describe('BDD test example for MathDemo class \n', () => {
       expect(result).to.equal(expected);
      });
 
+   it('should return the correct numeric value for pow (async) \n', (done) => {
+       var math : MathInterface = new MathDemo();
+       math.powAsync(3, 5, function(result) {
+         var expected = 243;
+         expect(result).to.be.a('number');
+         expect(result).to.equal(expected);
+         done(); // invoke done() inside your call back or fulfilled promises
+       });
+     });
 });
