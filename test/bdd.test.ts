@@ -18,4 +18,12 @@ describe('BDD test example for MathDemo class \n', () => {
     expect(math.PI).to.be.a('number');
   });
 
+  it('should return the correct numeric value for pow \n', () => {
+      var math : MathInterface = new MathDemo();
+      var result = math.pow(3,5);
+      var expected = 243;
+      expect(result).to.be.a('number');
+      expect(result).to.equal(expected);
+     });
+
 });
