@@ -1,7 +1,34 @@
 ///<reference path="./interfaces.d.ts" />
 ///<reference path="../typings/tsd.d.ts" />
 
-var template = 'HTML...';
+// template system would be a better implmentation of this.
+var template = '<div class="well">' +
+  '<div class="row">' +
+    '<div class="col-md-3">' +
+      '<div class="form-group">' +
+        '<label>Base</label>' +
+        '<input type="text" class="form-control" id="base" placeholder="0">' +
+        '</div>' +
+      '</div>' +
+    '<div class="col-md-3">' +
+      '<div class="form-group">' +
+        '<label>Exponent</label>' +
+          '<input type="text" class="form-control" id="exponent" placeholder="0">' +
+        '</div>' +
+      '</div>' +
+    '<div class="col-md-3">' +
+      '<div class="form-group">' +
+        '<label>Result</label>' +
+          '<input type="text" class="form-control" id="result" placeholder="1" disabled="disabled">' +
+        '</div>' +
+      '</div>' +
+    '<div class="col-md-3">' +
+      '<div class="form-group">' +
+        '<button id="submit" type="submit" class="btn btn-primary">Calculate</button>' +
+      '</div>' +
+    '</div>' +
+  '</div>' +
+'</div>';
 
 class CalculatorWidget implements CalculatorWidgetInterface{
 
@@ -10,6 +37,7 @@ class CalculatorWidget implements CalculatorWidgetInterface{
  private $exponent: JQuery;
  private $result: JQuery;
  private $btn: JQuery;
+
  constructor(math : MathInterface) {
    if(math == null) throw new Error("Argument null exception!");
    this._math = math;
@@ -37,36 +65,6 @@ class CalculatorWidget implements CalculatorWidgetInterface{
      this.$result.val(this._math.pow(base, exponent));
    }
  }
-
- // template system would be a better implmentation of this.
- var template = '<div class="well">' +
-   '<div class="row">' +
-     '<div class="col-md-3">' +
-       '<div class="form-group">' +
-         '<label>Base</label>' +
-         '<input type="text" class="form-control" id="base" placeholder="0">' +
-         '</div>' +
-       '</div>' +
-     '<div class="col-md-3">' +
-       '<div class="form-group">' +
-         '<label>Exponent</label>' +
-           '<input type="text" class="form-control" id="exponent" placeholder="0">' +
-         '</div>' +
-       '</div>' +
-     '<div class="col-md-3">' +
-       '<div class="form-group">' +
-         '<label>Result</label>' +
-           '<input type="text" class="form-control" id="result" placeholder="1" disabled="disabled">' +
-         '</div>' +
-       '</div>' +
-     '<div class="col-md-3">' +
-       '<div class="form-group">' +
-         '<button id="submit" type="submit" class="btn btn-primary">Calculate</button>' +
-       '</div>' +
-     '</div>' +
-   '</div>' +
- '</div>';
 }
-
 
 export { CalculatorWidget };
