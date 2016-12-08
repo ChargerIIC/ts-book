@@ -35,4 +35,10 @@ describe('BDD test example for MathDemo class \n', () => {
          done(); // invoke done() inside your call back or fulfilled promises
        });
      });
+
+   it('should throw an exception when no parameters passed \n', () => {
+     var math : MathInterface = new MathDemo();
+     var throwsF = function() { math.bad(/* missing args */) };
+     expect(throwsF).to.throw(Error);
+   });
 });
