@@ -42,3 +42,52 @@ describe('BDD test example for MathDemo class \n', () => {
      expect(throwsF).to.throw(Error);
    });
 });
+
+describe('BDD test example for CalculatorWidget class \n', () => {
+
+  before(function() {
+    $("body").append('<div id="widget"/>');
+  });
+
+  beforeEach(function() {
+    $("#widget").empty();
+  });
+
+  it('onSubmit should be invoked when #submit is clicked', () => {
+    var math : MathInterface = new MathDemo();
+    var calculator = new CalculatorWidget(math);
+    calculator.render("#widget");
+    $('#base').val("2");
+    $('#exponent').val("3");
+
+    // spy on onSubmit
+    var onSubmitSpy = sinon.spy(calculator, "onSubmit");
+    $("#submit").trigger("click");
+
+    // assert calculator.onSubmit was invoked when click on #submit
+    expect(onSubmitSpy.called).to.equal(true);
+    expect(onSubmitSpy.callCount).to.equal(1);
+    expect($("#result").val()).to.equal("8");
+  });
+
+  it('pass the right args to Math.pow', (done) => {
+    var math : MathInterface = new MathDemo();
+
+    // replace pow method with a method for testing
+    sinon.stub(math, "pow", function(a, b) {
+      // assert that CalculatorWidget.onSubmit invokes
+      // math.pow with the right arguments
+      expect(a).to.equal(2);
+      expect(b).to.equal(3);
+      done();
+    });
+
+    var calculator = new CalculatorWidget(math);
+    calculator.render("#widget");
+    $('#base').val("2");
+    $('#exponent').val("3");
+
+    $("#submit").trigger("click");
+  });
+
+});

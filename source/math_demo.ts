@@ -22,5 +22,15 @@ class MathDemo implements MathInterface{
       cb(result);
     }, delay);
   }
+
+  public bad(foo? : any) {
+  if(isNaN(foo)){
+    throw new Error("Error!");
+  }
+  else {
+    //...
+  }
+}
+
 }
 export { MathDemo };

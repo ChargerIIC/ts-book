@@ -4,3 +4,8 @@ interface MathInterface {
   powAsync(base: number, exponent: number, cb : (result : number) => void);
   bad(foo? : any) : void; //really?
 }
+
+interface CalculatorWidgetInterface {
+  render(id : string);
+  onSubmit() : void;
+}
